@@ -91,10 +91,10 @@ export default function LoginPage() {
                 >
                     Sign in with Google
                 </a>
-            <p className="mt-6 text-center font-body text-sm text-on-surface-variant">
-                No account? <a href="/register" className="text-primary">Register</a>
-            </p>
+                <p className="mt-6 text-center font-body text-sm text-on-surface-variant">
+                    No account? <a href="/register" className="text-primary">Register</a>
+                </p>
+            </div>
         </div>
-    </div>
-  );
+    );
 }
