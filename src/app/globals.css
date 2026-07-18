@@ -106,19 +106,6 @@
   --text-caption--font-weight: 400;
   --text-caption--letter-spacing: 0.01em;
 
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
-  --spacing-3xl: 64px;
-  --spacing-4xl: 96px;
-  --spacing-5xl: 120px;
-  --spacing-gutter: 24px;
-  --spacing-margin-mobile: 16px;
-  --spacing-margin-desktop: 40px;
-
   --radius-input: 16px;
   --radius-card: 24px;
   --radius-dialog: 28px;
