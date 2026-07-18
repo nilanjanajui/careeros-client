@@ -12,8 +12,8 @@ export function Navbar() {
                 Career<span className="text-primary">OS</span>
             </Link>
             <nav className="flex items-center gap-6 font-body text-sm font-medium text-on-surface-variant">
-                <Link href="/" className="hover:text-on-surface">Home</Link>
-                <Link href="/jobs" className="hover:text-on-surface">Explore Jobs</Link>
+                <Link href="/" className="hidden hover:text-on-surface md:inline">Home</Link>
+                <Link href="/jobs" className="hidden hover:text-on-surface md:inline">Explore Jobs</Link>
                 {hydrated && user ? (
                     <Link href="/dashboard" className="hover:text-on-surface">Dashboard</Link>
                 ) : (

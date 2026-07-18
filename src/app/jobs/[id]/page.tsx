@@ -3,6 +3,7 @@ import { use } from "react";
 import Link from "next/link";
 import { useJobQuery, useJobsQuery } from "@/hooks/useJobs";
 import { JobCard, JobCardSkeleton } from "@/components/explore/JobCard";
+import { CompanyReviews } from "@/components/reviews/CompanyReviews";
 
 export default function JobDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -94,6 +95,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     No reviews yet for {job.company}.
                 </p>
             </div>
+            <CompanyReviews company={job.company} />
 
             {
                 otherRelated.length > 0 && (
