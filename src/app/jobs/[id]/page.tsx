@@ -4,12 +4,18 @@ import Link from "next/link";
 import { useJobQuery, useJobsQuery } from "@/hooks/useJobs";
 import { JobCard, JobCardSkeleton } from "@/components/explore/JobCard";
 import { CompanyReviews } from "@/components/reviews/CompanyReviews";
+import { useAuthStore } from "@/store/authStore";
+import { useApplicationsQuery, useCreateApplicationMutation } from "@/hooks/useApplications";
 
 export default function JobDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const { data: job, isLoading, isError } = useJobQuery(id);
 
     const related = useJobsQuery({ category: job?.category, page: 1 });
+    const isAuthed = useAuthStore((s) => Boolean(s.user));
+    const applicationsQuery = useApplicationsQuery();
+    const saveMutation = useCreateApplicationMutation();
+    const alreadySaved = applicationsQuery.data?.some((app) => app.externalJobId === job?.id) ?? false;
 
     if (isLoading) {
         return <div className="mx-auto max-w-4xl px-4 py-16 font-body text-on-surface-variant">Loading listing…</div>;
@@ -71,14 +77,47 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     )}
                 </div>
 
-                <a
-                    href={job.redirectUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-8 inline-block rounded-input bg-primary px-6 py-3 font-body text-sm font-medium text-on-primary shadow-card hover:bg-primary-container"
-                >
-                    Apply on source site
-                </a>
+                <div className="mt-8 flex flex-wrap gap-3">
+                    <a
+                        href={job.redirectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block rounded-input bg-primary px-6 py-3 font-body text-sm font-medium text-on-primary shadow-card hover:bg-primary-container"
+                    >
+                        Apply on source site
+                    </a>
+
+                    {!isAuthed ? (
+                        <Link
+                            href="/login"
+                            className="inline-block rounded-input border border-outline px-6 py-3 font-body text-sm font-medium text-on-surface hover:bg-surface-container-low"
+                        >
+                            Log in to save
+                        </Link>
+                    ) : alreadySaved ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-input border border-outline px-6 py-3 font-body text-sm font-medium text-on-surface-variant">
+                            ✓ Saved
+                        </span>
+                    ) : (
+                        <button
+                            type="button"
+                            disabled={saveMutation.isPending}
+                            onClick={() =>
+                                saveMutation.mutate({
+                                    jobTitle: job.title,
+                                    company: job.company,
+                                    companyLogoUrl: job.companyLogoUrl,
+                                    status: "saved",
+                                    externalJobId: job.id,
+                                    notes: job.description,
+                                })
+                            }
+                            className="rounded-input border border-outline px-6 py-3 font-body text-sm font-medium text-on-surface hover:bg-surface-container-low disabled:opacity-50"
+                        >
+                            {saveMutation.isPending ? "Saving…" : "Save job"}
+                        </button>
+                    )}
+                </div>
 
                 <hr className="my-8 border-outline" />
 
@@ -89,12 +128,6 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 </p>
             </div>
 
-            <div className="mt-10">
-                <h2 className="font-heading text-h5 text-on-surface">Company reviews</h2>
-                <p className="mt-3 rounded-card bg-surface-container-low p-6 font-body text-sm text-on-surface-variant">
-                    No reviews yet for {job.company}.
-                </p>
-            </div>
             <CompanyReviews company={job.company} />
 
             {
