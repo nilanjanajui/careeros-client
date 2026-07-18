@@ -9,6 +9,7 @@ import { useState } from "react";
 export default function LoginPage() {
     const router = useRouter();
     const setAccessToken = useAuthStore((s) => s.setAccessToken);
+    const setUser = useAuthStore((s) => s.setUser);
     const [serverError, setServerError] = useState<string | null>(null);
 
     const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } =
@@ -28,6 +29,7 @@ export default function LoginPage() {
             return;
         }
         setAccessToken(json.accessToken);
+        setUser(json.user);
         router.push("/dashboard");
     }
 

@@ -6,15 +6,24 @@ import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+type RegisterFormInput = RegisterInput & {
+    confirmPassword: string;
+};
+
 export default function RegisterPage() {
     const router = useRouter();
     const setAccessToken = useAuthStore((s) => s.setAccessToken);
+    const setUser = useAuthStore((s) => s.setUser);
     const [serverError, setServerError] = useState<string | null>(null);
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } =
-        useForm<RegisterInput>({ resolver: zodResolver(registerSchema) });
+        useForm<RegisterFormInput>({ 
+            resolver: zodResolver(registerSchema.extend({
+                confirmPassword: registerSchema.shape.password,
+            }))
+        });
 
-    async function onSubmit(data: RegisterInput) {
+    async function onSubmit(data: RegisterFormInput) {
         setServerError(null);
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
             method: "POST",
@@ -28,6 +37,7 @@ export default function RegisterPage() {
             return;
         }
         setAccessToken(json.accessToken);
+        setUser(json.user);
         router.push("/dashboard");
     }
 
@@ -66,7 +76,15 @@ export default function RegisterPage() {
                         />
                         {errors.password && <p className="mt-1 text-xs text-error">{errors.password.message}</p>}
                     </div>
-
+                    <div>
+                        <input
+                            {...register("confirmPassword")}
+                            type="password"
+                            placeholder="Confirm Password"
+                            className="w-full rounded-input border border-outline bg-surface-container-low px-4 py-2.5 font-body text-sm outline-none focus:ring-2 focus:ring-primary-container"
+                        />
+                        {errors.confirmPassword && <p className="mt-1 text-xs text-error">{errors.confirmPassword.message}</p>}
+                    </div>
                     {serverError && <p className="text-sm text-error">{serverError}</p>}
 
                     <button

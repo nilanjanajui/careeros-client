@@ -15,6 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 export function AuthHydrator() {
     const setAccessToken = useAuthStore((s) => s.setAccessToken);
+    const setUser = useAuthStore((s) => s.setUser);
     const setHydrated = useAuthStore((s) => s.setHydrated);
 
     useEffect(() => {
@@ -25,6 +26,7 @@ export function AuthHydrator() {
             .then((res) => res.ok ? res.json() : null)
             .then((data) => {
                 if (data?.accessToken) setAccessToken(data.accessToken);
+                if (data?.user) setUser(data.user);
             })
             .finally(() => setHydrated(true));
         // eslint-disable-next-line react-hooks/exhaustive-deps
