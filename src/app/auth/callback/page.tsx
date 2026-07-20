@@ -1,9 +1,9 @@
 "use client";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 
-export default function AuthCallback() {
+function AuthCallbackInner() {
     const router = useRouter();
     const params = useSearchParams();
     const setAccessToken = useAuthStore((state) => state.setAccessToken);
@@ -20,4 +20,12 @@ export default function AuthCallback() {
     }, []);
 
     return <p>Signing you in…</p>;
+}
+
+export default function AuthCallback() {
+    return (
+        <Suspense fallback={<p>Signing you in…</p>}>
+            <AuthCallbackInner />
+        </Suspense>
+    );
 }
