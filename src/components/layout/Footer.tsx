@@ -10,6 +10,10 @@ const COMPANY_LINKS = [
     { href: "/about", label: "About Us" },
     { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+    { href: "/blog", label: "Blog" },
+    { href: "/help", label: "Help Center" },
 ];
 
 export function Footer() {
