@@ -1,5 +1,6 @@
 "use client";
 import { useMemo } from "react";
+import Link from "next/link";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useApplicationsQuery } from "@/hooks/useApplications";
 import { ApplicationStatus } from "@/types/application";
@@ -111,7 +112,16 @@ function DashboardView() {
 
     return (
         <div className="mx-auto max-w-6xl px-4 py-12">
-            <h1 className="font-heading text-h3 text-on-surface">Dashboard</h1>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <h1 className="font-heading text-h3 text-on-surface">Dashboard</h1>
+                <Link
+                    href="/tools/content-generator"
+                    className="inline-flex items-center gap-2 rounded-input bg-primary px-5 py-2.5 font-body text-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary-container hover:text-on-primary-container"
+                >
+                    <SparklesIcon />
+                    AI Content Generator
+                </Link>
+            </div>
 
             <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
                 <StatCard label="Total Applications" value={stats.total} />
@@ -169,5 +179,20 @@ export default function DashboardPage() {
         <ProtectedRoute>
             <DashboardView />
         </ProtectedRoute>
+    );
+}
+
+function SparklesIcon() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3v3" />
+            <path d="M18.5 5.5l-2 2" />
+            <path d="M21 12h-3" />
+            <path d="M18.5 18.5l-2-2" />
+            <path d="M12 21v-3" />
+            <path d="M5.5 18.5l2-2" />
+            <path d="M3 12h3" />
+            <path d="M5.5 5.5l2 2" />
+        </svg>
     );
 }
