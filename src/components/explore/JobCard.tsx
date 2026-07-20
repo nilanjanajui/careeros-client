@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Job } from "@/types/job";
 
@@ -14,7 +15,11 @@ export function JobCard({ job }: { job: Job }) {
     const fallbackLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=4F46E5&color=fff&bold=true`;
 
     return (
-        <div className="flex h-full flex-col gap-4 rounded-card bg-surface-container-lowest p-6 shadow-card transition-shadow hover:shadow-elevated">
+        <motion.div 
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="flex h-full flex-col gap-4 rounded-card bg-surface-container-lowest p-6 shadow-card hover:shadow-elevated"
+        >
             <div className="flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -64,7 +69,7 @@ export function JobCard({ job }: { job: Job }) {
                     View Details
                 </Link>
             </div>
-        </div>
+        </motion.div>
     );
 }
 

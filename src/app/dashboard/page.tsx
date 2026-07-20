@@ -1,6 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import Link from "next/link";
+import { motion, Variants } from "framer-motion";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useApplicationsQuery } from "@/hooks/useApplications";
 import { ApplicationStatus } from "@/types/application";
@@ -35,12 +36,25 @@ const STATUS_LABELS: Record<ApplicationStatus, string> = {
 
 function StatCard({ label, value }: { label: string; value: number }) {
     return (
-        <div className="rounded-card bg-surface-container-lowest p-6 shadow-card">
+        <div className="rounded-card bg-surface-container-lowest p-6 shadow-card h-full">
             <p className="font-body text-xs font-medium uppercase tracking-wide text-on-surface-variant">{label}</p>
             <p className="mt-2 font-heading text-h3 text-on-surface">{value}</p>
         </div>
     );
 }
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 },
+    },
+};
+
+const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+};
 
 function DashboardView() {
     const { data: applications, isLoading, isError } = useApplicationsQuery();
@@ -123,14 +137,32 @@ function DashboardView() {
                 </Link>
             </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-                <StatCard label="Total Applications" value={stats.total} />
-                <StatCard label="Interviews" value={stats.interviews} />
-                <StatCard label="Offers" value={stats.offers} />
-                <StatCard label="Saved Jobs" value={stats.saved} />
-            </div>
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4"
+            >
+                <motion.div variants={itemVariants}>
+                    <StatCard label="Total Applications" value={stats.total} />
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                    <StatCard label="Interviews" value={stats.interviews} />
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                    <StatCard label="Offers" value={stats.offers} />
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                    <StatCard label="Saved Jobs" value={stats.saved} />
+                </motion.div>
+            </motion.div>
 
-            <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 24 }}
+                className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2"
+            >
                 <div className="rounded-card bg-surface-container-lowest p-6 shadow-card">
                     <h2 className="font-heading text-h5 text-on-surface">Status Distribution</h2>
                     <div className="mt-4 h-64">
@@ -169,7 +201,7 @@ function DashboardView() {
                         </ResponsiveContainer>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }

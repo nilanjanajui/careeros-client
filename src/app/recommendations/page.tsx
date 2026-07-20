@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useGenerateRecommendationsMutation, useLogInteractionMutation } from "@/hooks/useRecommendations";
 import { useCreateApplicationMutation } from "@/hooks/useApplications";
@@ -37,7 +38,14 @@ function RecommendationCard({
     }
 
     return (
-        <div className="flex flex-col gap-3 rounded-card bg-surface-container-lowest p-6 shadow-card">
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="flex flex-col gap-3 rounded-card bg-surface-container-lowest p-6 shadow-card"
+        >
             <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                     <Link href={`/jobs/${job.id}`} className="font-heading text-h5 text-on-surface hover:underline">
@@ -70,7 +78,7 @@ function RecommendationCard({
                     Not a fit
                 </button>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -121,13 +129,15 @@ function RecommendationsView() {
                         </p>
                     ) : (
                         <div className="mt-6 flex flex-col gap-4">
-                            {visible.map((rec) => (
-                                <RecommendationCard
-                                    key={rec.jobId}
-                                    recommendation={rec}
-                                    onDismiss={(jobId) => setDismissed((prev) => new Set(prev).add(jobId))}
-                                />
-                            ))}
+                            <AnimatePresence mode="popLayout">
+                                {visible.map((rec) => (
+                                    <RecommendationCard
+                                        key={rec.jobId}
+                                        recommendation={rec}
+                                        onDismiss={(jobId) => setDismissed((prev) => new Set(prev).add(jobId))}
+                                    />
+                                ))}
+                            </AnimatePresence>
                         </div>
                     )}
                 </>

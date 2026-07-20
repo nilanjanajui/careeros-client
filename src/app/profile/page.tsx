@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { TagInput } from "@/components/profile/TagInput";
 import { useProfileQuery, useUpdateProfileMutation } from "@/hooks/useProfile";
@@ -249,11 +250,31 @@ function ProfileContainer() {
         );
     }
 
-    if (isEditing) {
-        return <ProfileFormFields key={profile._id} profile={profile} onCancel={() => setIsEditing(false)} />;
-    }
-
-    return <ProfileView profile={profile} onEdit={() => setIsEditing(true)} />;
+    return (
+        <AnimatePresence mode="wait">
+            {isEditing ? (
+                <motion.div
+                    key="edit"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <ProfileFormFields profile={profile} onCancel={() => setIsEditing(false)} />
+                </motion.div>
+            ) : (
+                <motion.div
+                    key="view"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <ProfileView profile={profile} onEdit={() => setIsEditing(true)} />
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
 }
 
 export default function ProfilePage() {
