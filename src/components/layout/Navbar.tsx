@@ -13,6 +13,7 @@ const LOGGED_IN_LINKS = [
     { href: "/jobs", label: "Jobs" },
     { href: "/dashboard", label: "Dashboard" },
     { href: "/applications/manage", label: "Applications" },
+    { href: "/recommendations", label: "Recommendations" },
     { href: "/profile", label: "Profile" }
 ];
 
