@@ -27,6 +27,7 @@ export function Navbar() {
     const links = isAuthed ? LOGGED_IN_LINKS : LOGGED_OUT_LINKS;
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown when clicking outside
@@ -46,9 +47,10 @@ export function Navbar() {
             document.removeEventListener("mousedown", handleClickOutside);
     }, [dropdownOpen]);
 
-    // Close dropdown on route change
+    // Close dropdown and mobile menu on route change
     useEffect(() => {
         setDropdownOpen(false);
+        setMobileMenuOpen(false);
     }, [pathname]);
 
     async function handleLogout() {
@@ -62,6 +64,7 @@ export function Navbar() {
         }
         logout();
         setDropdownOpen(false);
+        setMobileMenuOpen(false);
         router.push("/");
     }
 
@@ -72,6 +75,7 @@ export function Navbar() {
                     CareerOS
                 </Link>
 
+                {/* Desktop nav */}
                 <nav className="hidden items-center gap-6 font-body text-sm font-medium md:flex">
                     {links.map((link) => {
                         const active = pathname === link.href;
@@ -91,7 +95,7 @@ export function Navbar() {
                     })}
                 </nav>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                     {isAuthed ? (
                         <>
                             <button
@@ -198,8 +202,88 @@ export function Navbar() {
                             </Link>
                         </>
                     )}
+
+                    {/* Mobile hamburger button */}
+                    <button
+                        type="button"
+                        id="mobile-menu-btn"
+                        onClick={() => setMobileMenuOpen((prev) => !prev)}
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low md:hidden"
+                        aria-label="Toggle menu"
+                        aria-expanded={mobileMenuOpen}
+                    >
+                        {mobileMenuOpen ? <CloseIcon /> : <HamburgerIcon />}
+                    </button>
                 </div>
             </div>
+
+            {/* Mobile slide-down menu */}
+            {mobileMenuOpen && (
+                <nav
+                    id="mobile-menu"
+                    className="animate-dropdown border-t border-outline-variant bg-surface-container-lowest px-4 pb-4 pt-2 md:hidden"
+                >
+                    <div className="flex flex-col gap-1">
+                        {links.map((link) => {
+                            const active = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`rounded-input px-4 py-2.5 font-body text-sm font-medium transition-colors ${
+                                        active
+                                            ? "bg-primary-container/30 text-primary"
+                                            : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                                    }`}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
+
+                        {isAuthed && (
+                            <>
+                                <Link
+                                    href="/profile"
+                                    className={`rounded-input px-4 py-2.5 font-body text-sm font-medium transition-colors ${
+                                        pathname === "/profile"
+                                            ? "bg-primary-container/30 text-primary"
+                                            : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                                    }`}
+                                >
+                                    Profile
+                                </Link>
+                                <hr className="my-1 border-outline-variant" />
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className="rounded-input px-4 py-2.5 text-left font-body text-sm font-medium text-error transition-colors hover:bg-error-container/30"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        )}
+
+                        {!isAuthed && (
+                            <>
+                                <hr className="my-1 border-outline-variant" />
+                                <Link
+                                    href="/login"
+                                    className="rounded-input px-4 py-2.5 font-body text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    className="rounded-input bg-primary px-4 py-2.5 text-center font-body text-sm font-medium text-on-primary"
+                                >
+                                    Register
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                </nav>
+            )}
         </header>
     );
 }
@@ -209,6 +293,25 @@ function BellIcon() {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+    );
+}
+
+function HamburgerIcon() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+    );
+}
+
+function CloseIcon() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
     );
 }

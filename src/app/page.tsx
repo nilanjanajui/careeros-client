@@ -3,6 +3,7 @@ import { HeroPreview } from "@/components/landing/HeroPreview";
 import { Features } from "@/components/landing/Features";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LiveStats } from "@/components/landing/LiveStats";
+import { Testimonials } from "@/components/landing/Testimonials";
 import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
 
@@ -41,6 +42,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <LiveStats />
+      <Testimonials />
       <FAQ />
       <CTASection />
     </>

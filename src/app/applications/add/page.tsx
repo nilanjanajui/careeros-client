@@ -15,6 +15,7 @@ function AddApplicationForm() {
     const [shortNote, setShortNote] = useState("");
     const [notes, setNotes] = useState("");
     const [dateApplied, setDateApplied] = useState("");
+    const [companyLogoUrl, setCompanyLogoUrl] = useState("");
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -26,6 +27,7 @@ function AddApplicationForm() {
                 shortNote: shortNote || undefined,
                 notes: notes || undefined,
                 dateApplied: dateApplied || undefined,
+                companyLogoUrl: companyLogoUrl || undefined,
             },
             { onSuccess: () => router.push("/applications/manage") },
         );
@@ -77,6 +79,16 @@ function AddApplicationForm() {
                         type="date"
                         value={dateApplied}
                         onChange={(e) => setDateApplied(e.target.value)}
+                        className="rounded-input border border-outline bg-background px-4 py-3 font-body text-sm outline-none focus:ring-2 focus:ring-primary"
+                    />
+                </label>
+
+                <label className="flex flex-col gap-1.5">
+                    <span className="font-body text-sm font-medium text-on-surface">Company Logo URL <span className="text-on-surface-variant font-normal">(optional)</span></span>
+                    <input
+                        value={companyLogoUrl}
+                        onChange={(e) => setCompanyLogoUrl(e.target.value)}
+                        placeholder="https://example.com/logo.png"
                         className="rounded-input border border-outline bg-background px-4 py-3 font-body text-sm outline-none focus:ring-2 focus:ring-primary"
                     />
                 </label>

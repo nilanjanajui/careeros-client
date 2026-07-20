@@ -14,10 +14,7 @@ export function JobCard({ job }: { job: Job }) {
     const fallbackLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company)}&background=4F46E5&color=fff&bold=true`;
 
     return (
-        <Link
-            href={`/jobs/${job.id}`}
-            className="flex flex-col gap-4 rounded-card bg-surface-container-lowest p-8 shadow-card transition-shadow hover:shadow-elevated"
-        >
+        <div className="flex h-full flex-col gap-4 rounded-card bg-surface-container-lowest p-6 shadow-card transition-shadow hover:shadow-elevated">
             <div className="flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -39,6 +36,12 @@ export function JobCard({ job }: { job: Job }) {
 
             <h3 className="font-heading text-h5 text-on-surface line-clamp-2">{job.title}</h3>
 
+            {/* Short description */}
+            <p className="line-clamp-2 font-body text-xs leading-relaxed text-on-surface-variant">
+                {job.description.replace(/<[^>]*>/g, "").slice(0, 120)}
+                {job.description.length > 120 ? "…" : ""}
+            </p>
+
             <div className="flex flex-wrap gap-2">
                 <span className="rounded-full bg-secondary-container px-3 py-1 font-body text-xs font-medium text-on-secondary-container">
                     {job.category}
@@ -51,13 +54,23 @@ export function JobCard({ job }: { job: Job }) {
             </div>
 
             {salary && <p className="font-body text-sm font-medium text-primary">{salary}</p>}
-        </Link>
+
+            {/* View Details button */}
+            <div className="mt-auto pt-2">
+                <Link
+                    href={`/jobs/${job.id}`}
+                    className="inline-block w-full rounded-input border border-outline px-4 py-2 text-center font-body text-sm font-medium text-on-surface transition-colors hover:bg-surface-container-low"
+                >
+                    View Details
+                </Link>
+            </div>
+        </div>
     );
 }
 
 export function JobCardSkeleton() {
     return (
-        <div className="flex flex-col gap-4 rounded-card bg-surface-container-lowest p-8 shadow-card">
+        <div className="flex flex-col gap-4 rounded-card bg-surface-container-lowest p-6 shadow-card">
             <div className="flex items-center gap-3">
                 <div className="h-10 w-10 animate-pulse rounded-media bg-surface-container" />
                 <div className="flex-1 space-y-2">
@@ -66,7 +79,9 @@ export function JobCardSkeleton() {
                 </div>
             </div>
             <div className="h-5 w-4/5 animate-pulse rounded bg-surface-container" />
+            <div className="h-8 w-full animate-pulse rounded bg-surface-container" />
             <div className="h-5 w-1/2 animate-pulse rounded bg-surface-container" />
+            <div className="mt-auto h-9 w-full animate-pulse rounded-input bg-surface-container" />
         </div>
     );
 }

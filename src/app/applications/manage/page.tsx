@@ -51,7 +51,7 @@ function ManageApplicationsTable() {
                                 <th className="px-6 py-4 font-medium">Company</th>
                                 <th className="px-6 py-4 font-medium">Status</th>
                                 <th className="px-6 py-4 font-medium">Date applied</th>
-                                <th className="px-6 py-4 font-medium" />
+                                <th className="px-6 py-4 font-medium">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,16 +80,26 @@ function ManageApplicationsTable() {
                                         {app.dateApplied ? new Date(app.dateApplied).toLocaleDateString() : "—"}
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <button
-                                            onClick={() => {
-                                                if (confirm(`Remove "${app.jobTitle}" at ${app.company}?`)) {
-                                                    deleteApp.mutate(app._id);
-                                                }
-                                            }}
-                                            className="font-body text-xs font-medium text-error hover:underline"
-                                        >
-                                            Remove
-                                        </button>
+                                        <div className="flex items-center justify-end gap-3">
+                                            {app.externalJobId && (
+                                                <Link
+                                                    href={`/jobs/${app.externalJobId}`}
+                                                    className="font-body text-xs font-medium text-primary hover:underline"
+                                                >
+                                                    View
+                                                </Link>
+                                            )}
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm(`Remove "${app.jobTitle}" at ${app.company}?`)) {
+                                                        deleteApp.mutate(app._id);
+                                                    }
+                                                }}
+                                                className="font-body text-xs font-medium text-error hover:underline"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
