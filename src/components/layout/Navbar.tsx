@@ -7,6 +7,9 @@ import { useState, useRef, useEffect } from "react";
 const LOGGED_OUT_LINKS = [
     { href: "/", label: "Home" },
     { href: "/jobs", label: "Explore Jobs" },
+    { href: "/about", label: "About" },
+    { href: "/blog", label: "Blog" },
+    { href: "/contact", label: "Contact" },
 ];
 
 const LOGGED_IN_LINKS = [
@@ -15,6 +18,9 @@ const LOGGED_IN_LINKS = [
     { href: "/dashboard", label: "Dashboard" },
     { href: "/applications/manage", label: "Applications" },
     { href: "/recommendations", label: "Recommendations" },
+    { href: "/about", label: "About" },
+    { href: "/blog", label: "Blog" },
+    { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
